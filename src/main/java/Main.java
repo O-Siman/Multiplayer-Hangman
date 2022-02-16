@@ -19,6 +19,7 @@ public class Main {
             case SERVER -> {
                 ServerWebSocket server = new ServerWebSocket(new InetSocketAddress(8080));
                 server.start();
+                System.out.println(server.getAddress());
             }
             case CLIENT -> {
                 try {
@@ -31,7 +32,7 @@ public class Main {
     }
 
     public static void runClient() throws URISyntaxException, InterruptedException {
-        URI serverAddressUri = new URI("wss://localhost:8080");
+        URI serverAddressUri = new URI("wss://0.0.0.0:8080");
         ClientWebSocket client = new ClientWebSocket(serverAddressUri);
         System.out.println("Connecting...");
         client.connectBlocking();
