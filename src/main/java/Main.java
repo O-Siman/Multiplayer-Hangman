@@ -1,4 +1,4 @@
-import java.net.InetSocketAddress;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -17,9 +17,11 @@ public class Main {
 
         switch (gameType) {
             case SERVER -> {
-                ServerWebSocket server = new ServerWebSocket(new InetSocketAddress(8080));
-                server.start();
-                System.out.println(server.getAddress());
+                try {
+                    new Server().main();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             case CLIENT -> {
                 try {
@@ -32,14 +34,9 @@ public class Main {
     }
 
     public static void runClient() throws URISyntaxException, InterruptedException {
-        URI serverAddressUri = new URI("wss://0.0.0.0:8080");
+        URI serverAddressUri = new URI("ws://localhost:8082");
         ClientWebSocket client = new ClientWebSocket(serverAddressUri);
-        System.out.println("Connecting...");
         client.connectBlocking();
-        System.out.println("Sending message");
-        client.send("Hello there");
-        System.out.println("Closing");
-        client.close();
     }
 }
 
