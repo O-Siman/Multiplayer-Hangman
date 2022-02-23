@@ -125,27 +125,7 @@ public class Server {
         wordGuess.setText(stringBuilder.toString());
         frame.pack();
     }
-
-    public JPanel getPanel() {
-        return panel;
-    }
-
-    public JLabel getWordGuess() {
-        return wordGuess;
-    }
-
-    public JLabel getHangedManImageLabel() {
-        return hangedManImageLabel;
-    }
-
-    public JTextArea getLogTextArea() {
-        return logTextArea;
-    }
-
-    public JLabel getPlayersConnectedLabel() {
-        return playersConnectedLabel;
-    }
-
+    
     static class ServerWebSocket extends WebSocketServer {
         Server server;
 
@@ -155,19 +135,19 @@ public class Server {
         }
 
         private void updatePlayersConnected() {
-            server.getPlayersConnectedLabel().setText(playersConnected + (playersConnected == 1 ? " player connected." : " players connected."));
+            server.playersConnectedLabel.setText(playersConnected + (playersConnected == 1 ? " player connected." : " players connected."));
         }
 
         @Override
         public void onOpen(WebSocket conn, ClientHandshake handshake) {
-            server.getLogTextArea().setText(server.getLogTextArea().getText() + conn.getRemoteSocketAddress().getHostName() + " joined the game.\n");
+            server.logTextArea.setText(server.logTextArea.getText() + conn.getRemoteSocketAddress().getHostName() + " joined the game.\n");
             playersConnected++;
             updatePlayersConnected();
         }
 
         @Override
         public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-            server.getLogTextArea().setText(server.getLogTextArea().getText() + conn.getRemoteSocketAddress().getHostName() + " left the game.\n");
+            server.logTextArea.setText(server.logTextArea.getText() + conn.getRemoteSocketAddress().getHostName() + " left the game.\n");
             playersConnected--;
             updatePlayersConnected();
         }
@@ -185,9 +165,7 @@ public class Server {
                 case "cmd" -> {
                     String command = messageComponents[1];
                     switch (command) {
-                        case "help" -> {
-                            conn.send("Commands: help, start, pause, reset, gen_new, custom, bc");
-                        }
+                        case "help" -> conn.send("Commands: help, start, pause, reset, gen_new, custom, bc");
                         case "start" -> {
                             if (messageComponents[2].equals("4dm1n")) {
                                 gameRunning = true;
@@ -269,25 +247,25 @@ public class Server {
                     if (correctLetterCounter > 0) {
                         server.updateWordGuessUI(server.frame);
                         conn.send("There are " + correctLetterCounter + " of the letter " + String.valueOf(guessChar).toUpperCase() + " in the word.");
-                        server.getLogTextArea().append(
+                        server.logTextArea.append(
                                 conn.getRemoteSocketAddress().getHostName() + " found " + correctLetterCounter + " of the letter " + String.valueOf(guessChar).toUpperCase() + "!\n");
                         if (correctGuesses >= wordAndSolving[0].length) {
                             gameRunning = false;
                             broadcast("You win!");
-                            server.getLogTextArea().append("You win! The word was " + word + ".");
+                            server.logTextArea.append("You win! The word was " + word + ".");
                         }
                     } else {
                         // After the loop, if the character was not in the array, next phase of hangman
                         wrongGuesses++;
                         server.setHangedManImage(wrongGuesses);
                         conn.send("There are no occurrences of the letter " + String.valueOf(guessChar).toUpperCase() + " in the word.");
-                        server.getLogTextArea().append(
+                        server.logTextArea.append(
                                 conn.getRemoteSocketAddress().getHostName() + " did not find the letter " + String.valueOf(guessChar).toUpperCase() + " in this word.\n");
                         // Check for loss
                         if (wrongGuesses >= 6) {
                             gameRunning = false;
                             broadcast("You lose.");
-                            server.getLogTextArea().append("You lose. The word was " + word + ".\n");
+                            server.logTextArea.append("You lose. The word was " + word + ".\n");
                         }
                     }
                 }

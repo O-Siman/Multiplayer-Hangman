@@ -16,9 +16,7 @@ public class Main {
             return;
 
         switch (gameType) {
-            case SERVER -> {
-                new Server().main();
-            }
+            case SERVER -> new Server().main();
             case CLIENT -> {
                 try {
                     runClient();
