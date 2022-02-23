@@ -15,6 +15,7 @@ import java.net.ServerSocket;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public class Server {
     private JPanel panel;
@@ -76,8 +77,8 @@ public class Server {
         }
         do {
             Collections.shuffle(words);
-            word = words.get(0);
-        } while (word.length() != wordLength); // Words only == 5 characters
+            word = words.get(0).toLowerCase();
+        } while (word.length() != wordLength); // Words only == specified characters
         System.out.println("word = " + word);
     }
 
