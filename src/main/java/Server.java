@@ -86,6 +86,7 @@ public class Server {
         resetWordAndSolving();
         // Set our title to the blanks
         updateWordGuessUI(frame);
+        correctGuesses = 0;
         wrongGuesses = 0;
         setHangedManImage(0);
         gameRunning = false;
