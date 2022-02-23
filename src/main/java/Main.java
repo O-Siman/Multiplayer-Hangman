@@ -8,10 +8,8 @@ public class Main {
         if (args.length > 0) {
             if (args[0].equals("server"))
                 gameType = GameType.SERVER;
-            else if (args[0].equals("client"))
-                gameType = GameType.CLIENT;
             else
-                return;
+                gameType = GameType.CLIENT;
         } else
             return;
 
