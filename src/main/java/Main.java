@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Scanner;
@@ -6,9 +8,23 @@ public class Main {
     public static void main(String[] args) {
         GameType gameType;
         if (args.length > 0) {
-            gameType = GameType.SERVER;
-        } else
-            gameType = GameType.CLIENT;
+            if (args[0].equals("server")) {
+                gameType = GameType.SERVER;
+            } else {
+                gameType = GameType.CLIENT;
+            }
+        } else {
+            Runtime runtime = Runtime.getRuntime();
+            try {
+                runtime.exec("cmd.exe /c start cmd.exe /k \"java -jar " +
+                        new File(Server.class.getProtectionDomain().getCodeSource().getLocation()
+                        .toURI()).getAbsolutePath() + "\" client");
+                return;
+            } catch (IOException | URISyntaxException e) {
+                e.printStackTrace();
+                return;
+            }
+        }
 
         switch (gameType) {
             case SERVER -> new Server().main();
