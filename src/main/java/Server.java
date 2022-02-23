@@ -124,9 +124,8 @@ public class Server {
                     .append(' ');
         }
         wordGuess.setText(stringBuilder.toString());
-        frame.pack();
+//        frame.pack();
     }
-    
     static class ServerWebSocket extends WebSocketServer {
         Server server;
 
