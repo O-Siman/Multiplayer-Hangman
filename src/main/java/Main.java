@@ -32,7 +32,7 @@ public class Main {
         System.out.println("Input the join code: ");
         int port = scanner.nextInt();
         scanner.nextLine();
-        URI serverAddressUri = new URI("ws://localhost:" + port);
+        URI serverAddressUri = new URI("ws://10.2.6.70:" + port);
         ClientWebSocket client = new ClientWebSocket(serverAddressUri);
         System.out.println("Connecting...");
         client.connectBlocking();
