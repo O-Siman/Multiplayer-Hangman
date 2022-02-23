@@ -1,6 +1,6 @@
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -17,11 +17,7 @@ public class Main {
 
         switch (gameType) {
             case SERVER -> {
-                try {
-                    new Server().main();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                new Server().main();
             }
             case CLIENT -> {
                 try {
@@ -34,9 +30,26 @@ public class Main {
     }
 
     public static void runClient() throws URISyntaxException, InterruptedException {
-        URI serverAddressUri = new URI("ws://localhost:8082");
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Input the join code: ");
+        int port = scanner.nextInt();
+        scanner.nextLine();
+        URI serverAddressUri = new URI("ws://localhost:" + port);
         ClientWebSocket client = new ClientWebSocket(serverAddressUri);
+        System.out.println("Connecting...");
         client.connectBlocking();
+        if (!client.isOpen()) {
+            System.err.println("Didn't work. Rerun the program and try again.");
+            System.exit(1);
+        }
+        while (true) {
+            String input = scanner.nextLine();
+            if (input.startsWith("/")) {
+                client.send("cmd " + input.substring(1));
+            } else {
+                client.send("gss " + input);
+            }
+        }
     }
 }
 

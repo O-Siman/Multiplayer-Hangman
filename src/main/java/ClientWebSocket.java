@@ -18,13 +18,13 @@ public class ClientWebSocket extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
-        System.out.println("message = " + message);
+        System.out.println(message);
     }
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        System.out.println("code = " + code);
-        System.out.println("reason = " + reason);
+        System.err.println("Disconnected.");
+        System.err.println("Reason: " + reason);
     }
 
     @Override
